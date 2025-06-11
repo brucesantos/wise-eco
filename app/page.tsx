@@ -5,7 +5,7 @@ import Link from "next/link";
 
 export default function HomePage() {
   return (
-    <section className="flex flex-1 items-center bg-gray-50 dark:bg-gray-900">
+    <section className="flex min-h-[calc(100vh-6rem)] items-center justify-center bg-gray-50 dark:bg-gray-900">
       <div className="mx-auto grid w-full max-w-screen-xl px-4 py-8 lg:grid-cols-12 lg:gap-20 lg:py-16">
         <div className="w-full place-self-center lg:col-span-6">
           <div className="mx-auto rounded-lg bg-white p-6 shadow sm:max-w-xl sm:p-8 dark:bg-gray-800">
