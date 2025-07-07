@@ -23,10 +23,10 @@ export default function HomePage() {
               />
             </Link>
             <h1 className="mb-2 text-2xl leading-tight font-bold tracking-tight text-gray-900 dark:text-white">
-              Bem-vindo de volta
+              App na palma da mão
             </h1>
             <p className="text-sm font-light text-gray-500 dark:text-gray-300">
-              Comece seu site em segundos. Não tem uma conta?{" "}
+              Não tem uma conta?{" "}
               <Link
                 href="/signup"
                 className="text-primary-600 dark:text-primary-500 font-medium hover:underline"
