@@ -73,7 +73,7 @@ export default function DashboardPage() {
         <button
           type="button"
           onClick={() => {
-            window.location.href = "/relatorio-visita";
+            window.location.href = "/relatorio-visita-ampliado";
           }}
           className="bg-primary-700 hover:bg-primary-800 focus:ring-primary-300 dark:focus:ring-primary-500 inline-flex items-center rounded-lg px-4 py-2 text-sm font-medium text-white focus:ring-2 focus:outline-none"
         >
