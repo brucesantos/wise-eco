@@ -76,6 +76,69 @@ const Stepper = ({
   </ol>
 );
 
+const CustomRadioCheckbox = ({
+  name,
+  type,
+  value,
+  checked,
+  onChange,
+  label,
+}: {
+  name: string;
+  type: "radio" | "checkbox";
+  value: string;
+  checked: boolean;
+  onChange: () => void;
+  label: string;
+}) => (
+  <label
+    className={`flex cursor-pointer items-center rounded-lg border p-4 transition-colors ${checked ? "bg-primary-50 border-primary-500 dark:bg-primary-900 dark:border-primary-500" : "border-gray-300 bg-gray-50 dark:border-gray-600 dark:bg-gray-700"} hover:bg-gray-100 dark:hover:bg-gray-600`}
+  >
+    <input
+      type={type}
+      name={name}
+      value={value}
+      checked={checked}
+      onChange={onChange}
+      className="hidden"
+    />
+    <div className="flex items-center">
+      {type === "radio" ? (
+        <div
+          className={`mr-2 flex h-4 w-4 items-center justify-center rounded-full border transition-colors ${checked ? "bg-primary-500 border-primary-500 dark:bg-primary-500 dark:border-primary-500" : "border-gray-300 bg-white dark:border-gray-600 dark:bg-gray-700"} `}
+        >
+          {checked && (
+            <div className="h-2 w-2 rounded-full bg-white dark:bg-gray-900" />
+          )}
+        </div>
+      ) : (
+        <div
+          className={`mr-2 flex h-4 w-4 items-center justify-center rounded border transition-colors ${checked ? "bg-primary-500 border-primary-500 dark:bg-primary-500 dark:border-primary-500" : "border-gray-300 bg-white dark:border-gray-600 dark:bg-gray-700"} `}
+        >
+          {checked && (
+            <svg
+              className="h-3 w-3 text-white dark:text-gray-900"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2.5"
+              viewBox="0 0 16 16"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                d="M4 8l3 3 5-5"
+              />
+            </svg>
+          )}
+        </div>
+      )}
+      <span className="text-sm font-medium text-gray-900 dark:text-gray-300">
+        {label}
+      </span>
+    </div>
+  </label>
+);
+
 export default function RelatorioVisitaAmpliado() {
   const [activeStep, setActiveStep] = useState(0);
 
@@ -630,6 +693,7 @@ export default function RelatorioVisitaAmpliado() {
                 onChange={(date) =>
                   setDataVisita(date ? date.toISOString().slice(0, 10) : "")
                 }
+                className="fbp-datepicker"
               />
             </div>
             <div>
@@ -808,46 +872,38 @@ export default function RelatorioVisitaAmpliado() {
       <div>
         <Label>Separação de material</Label>
         <div className="flex flex-col gap-2">
-          <label className="flex items-center gap-2 text-gray-900 dark:text-gray-100">
-            <input
-              type="radio"
-              name="separacao"
-              value="pead-pp"
-              checked={separacaoMaterial === "pead-pp"}
-              onChange={() => setSeparacaoMaterial("pead-pp")}
-            />
-            Separa PEAD de PP
-          </label>
-          <label className="flex items-center gap-2 text-gray-900 dark:text-gray-100">
-            <input
-              type="radio"
-              name="separacao"
-              value="cor"
-              checked={separacaoMaterial === "cor"}
-              onChange={() => setSeparacaoMaterial("cor")}
-            />
-            Separa por cor
-          </label>
-          <label className="flex items-center gap-2 text-gray-900 dark:text-gray-100">
-            <input
-              type="radio"
-              name="separacao"
-              value="nao"
-              checked={separacaoMaterial === "nao"}
-              onChange={() => setSeparacaoMaterial("nao")}
-            />
-            Não separa…
-          </label>
-          <label className="flex items-center gap-2 text-gray-900 dark:text-gray-100">
-            <input
-              type="radio"
-              name="separacao"
-              value="obs"
-              checked={separacaoMaterial === "obs"}
-              onChange={() => setSeparacaoMaterial("obs")}
-            />
-            Observação
-          </label>
+          <CustomRadioCheckbox
+            name="separacao"
+            type="radio"
+            value="pead-pp"
+            checked={separacaoMaterial === "pead-pp"}
+            onChange={() => setSeparacaoMaterial("pead-pp")}
+            label="Separa PEAD de PP"
+          />
+          <CustomRadioCheckbox
+            name="separacao"
+            type="radio"
+            value="cor"
+            checked={separacaoMaterial === "cor"}
+            onChange={() => setSeparacaoMaterial("cor")}
+            label="Separa por cor"
+          />
+          <CustomRadioCheckbox
+            name="separacao"
+            type="radio"
+            value="nao"
+            checked={separacaoMaterial === "nao"}
+            onChange={() => setSeparacaoMaterial("nao")}
+            label="Não separa…"
+          />
+          <CustomRadioCheckbox
+            name="separacao"
+            type="radio"
+            value="obs"
+            checked={separacaoMaterial === "obs"}
+            onChange={() => setSeparacaoMaterial("obs")}
+            label="Observação"
+          />
           {separacaoMaterial === "obs" && (
             <textarea
               className="block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-blue-500 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400 dark:focus:border-blue-500 dark:focus:ring-blue-500"
@@ -970,52 +1026,44 @@ export default function RelatorioVisitaAmpliado() {
     <div className="space-y-6">
       <div>
         <Label>Emite MTR?</Label>
-        <div className="flex gap-4">
-          <label className="flex items-center gap-2 text-gray-900 dark:text-gray-100">
-            <input
-              type="radio"
-              name="emite-mtr"
-              value="sim"
-              checked={emiteMTR === true}
-              onChange={() => setEmiteMTR(true)}
-            />
-            Sim
-          </label>
-          <label className="flex items-center gap-2 text-gray-900 dark:text-gray-100">
-            <input
-              type="radio"
-              name="emite-mtr"
-              value="nao"
-              checked={emiteMTR === false}
-              onChange={() => setEmiteMTR(false)}
-            />
-            Não
-          </label>
+        <div className="flex flex-col gap-2">
+          <CustomRadioCheckbox
+            name="emite-mtr"
+            type="radio"
+            value="sim"
+            checked={emiteMTR === true}
+            onChange={() => setEmiteMTR(true)}
+            label="Sim"
+          />
+          <CustomRadioCheckbox
+            name="emite-mtr"
+            type="radio"
+            value="nao"
+            checked={emiteMTR === false}
+            onChange={() => setEmiteMTR(false)}
+            label="Não"
+          />
         </div>
       </div>
       <div>
         <Label>Os rejeitos são enviados para aterro?</Label>
-        <div className="flex gap-4">
-          <label className="flex items-center gap-2 text-gray-900 dark:text-gray-100">
-            <input
-              type="radio"
-              name="rejeitos-aterro"
-              value="sim"
-              checked={rejeitosAterro === true}
-              onChange={() => setRejeitosAterro(true)}
-            />
-            Sim
-          </label>
-          <label className="flex items-center gap-2 text-gray-900 dark:text-gray-100">
-            <input
-              type="radio"
-              name="rejeitos-aterro"
-              value="nao"
-              checked={rejeitosAterro === false}
-              onChange={() => setRejeitosAterro(false)}
-            />
-            Não
-          </label>
+        <div className="flex flex-col gap-2">
+          <CustomRadioCheckbox
+            name="rejeitos-aterro"
+            type="radio"
+            value="sim"
+            checked={rejeitosAterro === true}
+            onChange={() => setRejeitosAterro(true)}
+            label="Sim"
+          />
+          <CustomRadioCheckbox
+            name="rejeitos-aterro"
+            type="radio"
+            value="nao"
+            checked={rejeitosAterro === false}
+            onChange={() => setRejeitosAterro(false)}
+            label="Não"
+          />
         </div>
         {rejeitosAterro && (
           <div className="mt-2">
@@ -1034,37 +1082,31 @@ export default function RelatorioVisitaAmpliado() {
           Possui área reservada ou isolada para armazenagem de produtos químicos
           e contaminados?
         </Label>
-        <div className="flex gap-4">
-          <label className="flex items-center gap-2 text-gray-900 dark:text-gray-100">
-            <input
-              type="radio"
-              name="area-quimicos"
-              value="sim"
-              checked={areaQuimicos === "sim"}
-              onChange={() => setAreaQuimicos("sim")}
-            />
-            Sim
-          </label>
-          <label className="flex items-center gap-2 text-gray-900 dark:text-gray-100">
-            <input
-              type="radio"
-              name="area-quimicos"
-              value="nao"
-              checked={areaQuimicos === "nao"}
-              onChange={() => setAreaQuimicos("nao")}
-            />
-            Não
-          </label>
-          <label className="flex items-center gap-2 text-gray-900 dark:text-gray-100">
-            <input
-              type="radio"
-              name="area-quimicos"
-              value="na"
-              checked={areaQuimicos === "na"}
-              onChange={() => setAreaQuimicos("na")}
-            />
-            Não se aplica
-          </label>
+        <div className="flex flex-col gap-2">
+          <CustomRadioCheckbox
+            name="area-quimicos"
+            type="radio"
+            value="sim"
+            checked={areaQuimicos === "sim"}
+            onChange={() => setAreaQuimicos("sim")}
+            label="Sim"
+          />
+          <CustomRadioCheckbox
+            name="area-quimicos"
+            type="radio"
+            value="nao"
+            checked={areaQuimicos === "nao"}
+            onChange={() => setAreaQuimicos("nao")}
+            label="Não"
+          />
+          <CustomRadioCheckbox
+            name="area-quimicos"
+            type="radio"
+            value="na"
+            checked={areaQuimicos === "na"}
+            onChange={() => setAreaQuimicos("na")}
+            label="Não se aplica"
+          />
         </div>
         <div className="mt-2">
           <Label>Observação (opcional)</Label>
@@ -1118,62 +1160,52 @@ export default function RelatorioVisitaAmpliado() {
         <div className="mb-2 text-xs text-gray-500 dark:text-gray-400">
           Corrosivos, químicos, óleos, metais pesados...
         </div>
-        <div className="flex gap-4">
-          <label className="flex items-center gap-2 text-gray-900 dark:text-gray-100">
-            <input
-              type="radio"
-              name="acidente-produtos"
-              value="sim"
-              checked={acidenteProdutos === "sim"}
-              onChange={() => setAcidenteProdutos("sim")}
-            />
-            Sim
-          </label>
-          <label className="flex items-center gap-2 text-gray-900 dark:text-gray-100">
-            <input
-              type="radio"
-              name="acidente-produtos"
-              value="nao"
-              checked={acidenteProdutos === "nao"}
-              onChange={() => setAcidenteProdutos("nao")}
-            />
-            Não
-          </label>
-          <label className="flex items-center gap-2 text-gray-900 dark:text-gray-100">
-            <input
-              type="radio"
-              name="acidente-produtos"
-              value="na"
-              checked={acidenteProdutos === "na"}
-              onChange={() => setAcidenteProdutos("na")}
-            />
-            Não se aplica
-          </label>
+        <div className="flex flex-col gap-2">
+          <CustomRadioCheckbox
+            name="acidente-produtos"
+            type="radio"
+            value="sim"
+            checked={acidenteProdutos === "sim"}
+            onChange={() => setAcidenteProdutos("sim")}
+            label="Sim"
+          />
+          <CustomRadioCheckbox
+            name="acidente-produtos"
+            type="radio"
+            value="nao"
+            checked={acidenteProdutos === "nao"}
+            onChange={() => setAcidenteProdutos("nao")}
+            label="Não"
+          />
+          <CustomRadioCheckbox
+            name="acidente-produtos"
+            type="radio"
+            value="na"
+            checked={acidenteProdutos === "na"}
+            onChange={() => setAcidenteProdutos("na")}
+            label="Não se aplica"
+          />
         </div>
         {acidenteProdutos === "sim" && (
           <div className="mt-2">
             <Label>Possui plano de emergência?</Label>
-            <div className="flex gap-4">
-              <label className="flex items-center gap-2 text-gray-900 dark:text-gray-100">
-                <input
-                  type="radio"
-                  name="plano-emergencia"
-                  value="sim"
-                  checked={planoEmergencia === true}
-                  onChange={() => setPlanoEmergencia(true)}
-                />
-                Sim
-              </label>
-              <label className="flex items-center gap-2 text-gray-900 dark:text-gray-100">
-                <input
-                  type="radio"
-                  name="plano-emergencia"
-                  value="nao"
-                  checked={planoEmergencia === false}
-                  onChange={() => setPlanoEmergencia(false)}
-                />
-                Não
-              </label>
+            <div className="flex flex-col gap-2">
+              <CustomRadioCheckbox
+                name="plano-emergencia"
+                type="radio"
+                value="sim"
+                checked={planoEmergencia === true}
+                onChange={() => setPlanoEmergencia(true)}
+                label="Sim"
+              />
+              <CustomRadioCheckbox
+                name="plano-emergencia"
+                type="radio"
+                value="nao"
+                checked={planoEmergencia === false}
+                onChange={() => setPlanoEmergencia(false)}
+                label="Não"
+              />
             </div>
           </div>
         )}
@@ -1224,37 +1256,31 @@ export default function RelatorioVisitaAmpliado() {
       </div>
       <div>
         <Label>Indícios de descarte de efluente inadequado?</Label>
-        <div className="flex gap-4">
-          <label className="flex items-center gap-2 text-gray-900 dark:text-gray-100">
-            <input
-              type="radio"
-              name="indicios-efluente"
-              value="sim"
-              checked={indiciosEfluente === "sim"}
-              onChange={() => setIndiciosEfluente("sim")}
-            />
-            Sim
-          </label>
-          <label className="flex items-center gap-2 text-gray-900 dark:text-gray-100">
-            <input
-              type="radio"
-              name="indicios-efluente"
-              value="nao"
-              checked={indiciosEfluente === "nao"}
-              onChange={() => setIndiciosEfluente("nao")}
-            />
-            Não
-          </label>
-          <label className="flex items-center gap-2 text-gray-900 dark:text-gray-100">
-            <input
-              type="radio"
-              name="indicios-efluente"
-              value="na"
-              checked={indiciosEfluente === "na"}
-              onChange={() => setIndiciosEfluente("na")}
-            />
-            Não se aplica
-          </label>
+        <div className="flex flex-col gap-2">
+          <CustomRadioCheckbox
+            name="indicios-efluente"
+            type="radio"
+            value="sim"
+            checked={indiciosEfluente === "sim"}
+            onChange={() => setIndiciosEfluente("sim")}
+            label="Sim"
+          />
+          <CustomRadioCheckbox
+            name="indicios-efluente"
+            type="radio"
+            value="nao"
+            checked={indiciosEfluente === "nao"}
+            onChange={() => setIndiciosEfluente("nao")}
+            label="Não"
+          />
+          <CustomRadioCheckbox
+            name="indicios-efluente"
+            type="radio"
+            value="na"
+            checked={indiciosEfluente === "na"}
+            onChange={() => setIndiciosEfluente("na")}
+            label="Não se aplica"
+          />
         </div>
         <div className="mt-2">
           <Label>Foto</Label>
@@ -1294,37 +1320,31 @@ export default function RelatorioVisitaAmpliado() {
       </div>
       <div>
         <Label>Indícios de descarte de resíduos em local inadequado?</Label>
-        <div className="flex gap-4">
-          <label className="flex items-center gap-2 text-gray-900 dark:text-gray-100">
-            <input
-              type="radio"
-              name="indicios-residuos"
-              value="sim"
-              checked={indiciosResiduos === "sim"}
-              onChange={() => setIndiciosResiduos("sim")}
-            />
-            Sim
-          </label>
-          <label className="flex items-center gap-2 text-gray-900 dark:text-gray-100">
-            <input
-              type="radio"
-              name="indicios-residuos"
-              value="nao"
-              checked={indiciosResiduos === "nao"}
-              onChange={() => setIndiciosResiduos("nao")}
-            />
-            Não
-          </label>
-          <label className="flex items-center gap-2 text-gray-900 dark:text-gray-100">
-            <input
-              type="radio"
-              name="indicios-residuos"
-              value="na"
-              checked={indiciosResiduos === "na"}
-              onChange={() => setIndiciosResiduos("na")}
-            />
-            Não se aplica
-          </label>
+        <div className="flex flex-col gap-2">
+          <CustomRadioCheckbox
+            name="indicios-residuos"
+            type="radio"
+            value="sim"
+            checked={indiciosResiduos === "sim"}
+            onChange={() => setIndiciosResiduos("sim")}
+            label="Sim"
+          />
+          <CustomRadioCheckbox
+            name="indicios-residuos"
+            type="radio"
+            value="nao"
+            checked={indiciosResiduos === "nao"}
+            onChange={() => setIndiciosResiduos("nao")}
+            label="Não"
+          />
+          <CustomRadioCheckbox
+            name="indicios-residuos"
+            type="radio"
+            value="na"
+            checked={indiciosResiduos === "na"}
+            onChange={() => setIndiciosResiduos("na")}
+            label="Não se aplica"
+          />
         </div>
         <div className="mt-2">
           <Label>Foto</Label>
@@ -1364,62 +1384,52 @@ export default function RelatorioVisitaAmpliado() {
       </div>
       <div>
         <Label>Possui estação de tratamento de água?</Label>
-        <div className="flex gap-4">
-          <label className="flex items-center gap-2 text-gray-900 dark:text-gray-100">
-            <input
-              type="radio"
-              name="estacao-tratamento"
-              value="sim"
-              checked={estacaoTratamento === "sim"}
-              onChange={() => setEstacaoTratamento("sim")}
-            />
-            Sim
-          </label>
-          <label className="flex items-center gap-2 text-gray-900 dark:text-gray-100">
-            <input
-              type="radio"
-              name="estacao-tratamento"
-              value="nao"
-              checked={estacaoTratamento === "nao"}
-              onChange={() => setEstacaoTratamento("nao")}
-            />
-            Não
-          </label>
-          <label className="flex items-center gap-2 text-gray-900 dark:text-gray-100">
-            <input
-              type="radio"
-              name="estacao-tratamento"
-              value="na"
-              checked={estacaoTratamento === "na"}
-              onChange={() => setEstacaoTratamento("na")}
-            />
-            Não se aplica
-          </label>
+        <div className="flex flex-col gap-2">
+          <CustomRadioCheckbox
+            name="estacao-tratamento"
+            type="radio"
+            value="sim"
+            checked={estacaoTratamento === "sim"}
+            onChange={() => setEstacaoTratamento("sim")}
+            label="Sim"
+          />
+          <CustomRadioCheckbox
+            name="estacao-tratamento"
+            type="radio"
+            value="nao"
+            checked={estacaoTratamento === "nao"}
+            onChange={() => setEstacaoTratamento("nao")}
+            label="Não"
+          />
+          <CustomRadioCheckbox
+            name="estacao-tratamento"
+            type="radio"
+            value="na"
+            checked={estacaoTratamento === "na"}
+            onChange={() => setEstacaoTratamento("na")}
+            label="Não se aplica"
+          />
         </div>
         {estacaoTratamento === "sim" && (
           <div className="mt-2">
             <Label>Possui licença?</Label>
-            <div className="flex gap-4">
-              <label className="flex items-center gap-2 text-gray-900 dark:text-gray-100">
-                <input
-                  type="radio"
-                  name="possui-licenca"
-                  value="sim"
-                  checked={possuiLicenca === true}
-                  onChange={() => setPossuiLicenca(true)}
-                />
-                Sim
-              </label>
-              <label className="flex items-center gap-2 text-gray-900 dark:text-gray-100">
-                <input
-                  type="radio"
-                  name="possui-licenca"
-                  value="nao"
-                  checked={possuiLicenca === false}
-                  onChange={() => setPossuiLicenca(false)}
-                />
-                Não
-              </label>
+            <div className="flex flex-col gap-2">
+              <CustomRadioCheckbox
+                name="possui-licenca"
+                type="radio"
+                value="sim"
+                checked={possuiLicenca === true}
+                onChange={() => setPossuiLicenca(true)}
+                label="Sim"
+              />
+              <CustomRadioCheckbox
+                name="possui-licenca"
+                type="radio"
+                value="nao"
+                checked={possuiLicenca === false}
+                onChange={() => setPossuiLicenca(false)}
+                label="Não"
+              />
             </div>
           </div>
         )}
@@ -1461,37 +1471,31 @@ export default function RelatorioVisitaAmpliado() {
       </div>
       <div>
         <Label>Recebe material hospitalar?</Label>
-        <div className="flex gap-4">
-          <label className="flex items-center gap-2 text-gray-900 dark:text-gray-100">
-            <input
-              type="radio"
-              name="material-hospitalar"
-              value="sim"
-              checked={materialHospitalar === "sim"}
-              onChange={() => setMaterialHospitalar("sim")}
-            />
-            Sim
-          </label>
-          <label className="flex items-center gap-2 text-gray-900 dark:text-gray-100">
-            <input
-              type="radio"
-              name="material-hospitalar"
-              value="nao"
-              checked={materialHospitalar === "nao"}
-              onChange={() => setMaterialHospitalar("nao")}
-            />
-            Não
-          </label>
-          <label className="flex items-center gap-2 text-gray-900 dark:text-gray-100">
-            <input
-              type="radio"
-              name="material-hospitalar"
-              value="na"
-              checked={materialHospitalar === "na"}
-              onChange={() => setMaterialHospitalar("na")}
-            />
-            Não se aplica
-          </label>
+        <div className="flex flex-col gap-2">
+          <CustomRadioCheckbox
+            name="material-hospitalar"
+            type="radio"
+            value="sim"
+            checked={materialHospitalar === "sim"}
+            onChange={() => setMaterialHospitalar("sim")}
+            label="Sim"
+          />
+          <CustomRadioCheckbox
+            name="material-hospitalar"
+            type="radio"
+            value="nao"
+            checked={materialHospitalar === "nao"}
+            onChange={() => setMaterialHospitalar("nao")}
+            label="Não"
+          />
+          <CustomRadioCheckbox
+            name="material-hospitalar"
+            type="radio"
+            value="na"
+            checked={materialHospitalar === "na"}
+            onChange={() => setMaterialHospitalar("na")}
+            label="Não se aplica"
+          />
         </div>
         {materialHospitalar === "sim" && (
           <div className="mt-2">
@@ -1665,6 +1669,7 @@ export default function RelatorioVisitaAmpliado() {
                         date ? date.toISOString().slice(0, 10) : "",
                       )
                     }
+                    className="fbp-datepicker"
                   />
                 </div>
               </div>
@@ -1695,27 +1700,23 @@ export default function RelatorioVisitaAmpliado() {
     <div className="space-y-6">
       <div>
         <Label>Faz parte de rede de cooperativas?</Label>
-        <div className="flex gap-4">
-          <label className="flex items-center gap-2 text-gray-900 dark:text-gray-100">
-            <input
-              type="radio"
-              name="rede-cooperativas"
-              value="sim"
-              checked={redeCooperativas === true}
-              onChange={() => setRedeCooperativas(true)}
-            />
-            Sim
-          </label>
-          <label className="flex items-center gap-2 text-gray-900 dark:text-gray-100">
-            <input
-              type="radio"
-              name="rede-cooperativas"
-              value="nao"
-              checked={redeCooperativas === false}
-              onChange={() => setRedeCooperativas(false)}
-            />
-            Não
-          </label>
+        <div className="flex flex-col gap-2">
+          <CustomRadioCheckbox
+            name="rede-cooperativas"
+            type="radio"
+            value="sim"
+            checked={redeCooperativas === true}
+            onChange={() => setRedeCooperativas(true)}
+            label="Sim"
+          />
+          <CustomRadioCheckbox
+            name="rede-cooperativas"
+            type="radio"
+            value="nao"
+            checked={redeCooperativas === false}
+            onChange={() => setRedeCooperativas(false)}
+            label="Não"
+          />
         </div>
         {redeCooperativas && (
           <>
@@ -1777,27 +1778,23 @@ export default function RelatorioVisitaAmpliado() {
       </div>
       <div>
         <Label>Faz parte de projeto social?</Label>
-        <div className="flex gap-4">
-          <label className="flex items-center gap-2 text-gray-900 dark:text-gray-100">
-            <input
-              type="radio"
-              name="projeto-social"
-              value="sim"
-              checked={projetoSocial === true}
-              onChange={() => setProjetoSocial(true)}
-            />
-            Sim
-          </label>
-          <label className="flex items-center gap-2 text-gray-900 dark:text-gray-100">
-            <input
-              type="radio"
-              name="projeto-social"
-              value="nao"
-              checked={projetoSocial === false}
-              onChange={() => setProjetoSocial(false)}
-            />
-            Não
-          </label>
+        <div className="flex flex-col gap-2">
+          <CustomRadioCheckbox
+            name="projeto-social"
+            type="radio"
+            value="sim"
+            checked={projetoSocial === true}
+            onChange={() => setProjetoSocial(true)}
+            label="Sim"
+          />
+          <CustomRadioCheckbox
+            name="projeto-social"
+            type="radio"
+            value="nao"
+            checked={projetoSocial === false}
+            onChange={() => setProjetoSocial(false)}
+            label="Não"
+          />
         </div>
         {projetoSocial && (
           <>
@@ -1888,7 +1885,8 @@ export default function RelatorioVisitaAmpliado() {
                 type="text"
                 value={numHomens || ""}
                 onChange={(e) => setNumHomens(parseInt(e.target.value) || 0)}
-                className="block h-11 w-full border-x-0 border-gray-300 bg-gray-50 py-2.5 text-center text-sm text-gray-900 focus:border-blue-500 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400 dark:focus:border-blue-500 dark:focus:ring-blue-500"
+                placeholder="0"
+                className="block h-11 w-full border border-x-0 border-gray-300 bg-gray-50 py-2.5 text-center text-sm text-gray-900 focus:border-blue-500 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400 dark:focus:border-blue-500 dark:focus:ring-blue-500"
               />
               <button
                 type="button"
@@ -1941,7 +1939,8 @@ export default function RelatorioVisitaAmpliado() {
                 type="text"
                 value={numMulheres || ""}
                 onChange={(e) => setNumMulheres(parseInt(e.target.value) || 0)}
-                className="block h-11 w-full border-x-0 border-gray-300 bg-gray-50 py-2.5 text-center text-sm text-gray-900 focus:border-blue-500 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400 dark:focus:border-blue-500 dark:focus:ring-blue-500"
+                placeholder="0"
+                className="block h-11 w-full border border-x-0 border-gray-300 bg-gray-50 py-2.5 text-center text-sm text-gray-900 focus:border-blue-500 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400 dark:focus:border-blue-500 dark:focus:ring-blue-500"
               />
               <button
                 type="button"
@@ -1994,7 +1993,8 @@ export default function RelatorioVisitaAmpliado() {
                 type="text"
                 value={numRegressos || ""}
                 onChange={(e) => setNumRegressos(parseInt(e.target.value) || 0)}
-                className="block h-11 w-full border-x-0 border-gray-300 bg-gray-50 py-2.5 text-center text-sm text-gray-900 focus:border-blue-500 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400 dark:focus:border-blue-500 dark:focus:ring-blue-500"
+                placeholder="0"
+                className="block h-11 w-full border border-x-0 border-gray-300 bg-gray-50 py-2.5 text-center text-sm text-gray-900 focus:border-blue-500 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400 dark:focus:border-blue-500 dark:focus:ring-blue-500"
               />
               <button
                 type="button"
@@ -2080,19 +2080,20 @@ export default function RelatorioVisitaAmpliado() {
         <Label>Benefícios</Label>
         <div className="grid grid-cols-1 gap-2 md:grid-cols-2">
           {beneficiosOpcoes.map((beneficio) => (
-            <label
+            <CustomRadioCheckbox
               key={beneficio}
-              className="flex items-center gap-2 text-gray-900 dark:text-gray-100"
-            >
-              <input
-                type="checkbox"
-                checked={beneficiosSelecionados.includes(beneficio)}
-                onChange={(e) =>
-                  handleBeneficioChange(beneficio, e.target.checked)
-                }
-              />
-              {beneficio}
-            </label>
+              name="beneficios"
+              type="checkbox"
+              value={beneficio}
+              checked={beneficiosSelecionados.includes(beneficio)}
+              onChange={() =>
+                handleBeneficioChange(
+                  beneficio,
+                  !beneficiosSelecionados.includes(beneficio),
+                )
+              }
+              label={beneficio}
+            />
           ))}
         </div>
         <div className="mt-4">
@@ -2147,37 +2148,31 @@ export default function RelatorioVisitaAmpliado() {
     <div className="space-y-6">
       <div>
         <Label>Vestiário</Label>
-        <div className="flex gap-4">
-          <label className="flex items-center gap-2 text-gray-900 dark:text-gray-100">
-            <input
-              type="radio"
-              name="vestiario"
-              value="adequado"
-              checked={vestiario === "adequado"}
-              onChange={() => setVestiario("adequado")}
-            />
-            Adequado
-          </label>
-          <label className="flex items-center gap-2 text-gray-900 dark:text-gray-100">
-            <input
-              type="radio"
-              name="vestiario"
-              value="inadequado"
-              checked={vestiario === "inadequado"}
-              onChange={() => setVestiario("inadequado")}
-            />
-            Inadequado
-          </label>
-          <label className="flex items-center gap-2 text-gray-900 dark:text-gray-100">
-            <input
-              type="radio"
-              name="vestiario"
-              value="nao-possui"
-              checked={vestiario === "nao-possui"}
-              onChange={() => setVestiario("nao-possui")}
-            />
-            Não possui
-          </label>
+        <div className="flex flex-col gap-2">
+          <CustomRadioCheckbox
+            name="vestiario"
+            type="radio"
+            value="adequado"
+            checked={vestiario === "adequado"}
+            onChange={() => setVestiario("adequado")}
+            label="Adequado"
+          />
+          <CustomRadioCheckbox
+            name="vestiario"
+            type="radio"
+            value="inadequado"
+            checked={vestiario === "inadequado"}
+            onChange={() => setVestiario("inadequado")}
+            label="Inadequado"
+          />
+          <CustomRadioCheckbox
+            name="vestiario"
+            type="radio"
+            value="nao-possui"
+            checked={vestiario === "nao-possui"}
+            onChange={() => setVestiario("nao-possui")}
+            label="Não possui"
+          />
         </div>
         <div className="mt-2">
           <Label>Foto (opcional)</Label>
@@ -2217,37 +2212,31 @@ export default function RelatorioVisitaAmpliado() {
       </div>
       <div>
         <Label>Refeitório</Label>
-        <div className="flex gap-4">
-          <label className="flex items-center gap-2 text-gray-900 dark:text-gray-100">
-            <input
-              type="radio"
-              name="refeitorio"
-              value="adequado"
-              checked={refeitorio === "adequado"}
-              onChange={() => setRefeitorio("adequado")}
-            />
-            Adequado
-          </label>
-          <label className="flex items-center gap-2 text-gray-900 dark:text-gray-100">
-            <input
-              type="radio"
-              name="refeitorio"
-              value="inadequado"
-              checked={refeitorio === "inadequado"}
-              onChange={() => setRefeitorio("inadequado")}
-            />
-            Inadequado
-          </label>
-          <label className="flex items-center gap-2 text-gray-900 dark:text-gray-100">
-            <input
-              type="radio"
-              name="refeitorio"
-              value="nao-possui"
-              checked={refeitorio === "nao-possui"}
-              onChange={() => setRefeitorio("nao-possui")}
-            />
-            Não possui
-          </label>
+        <div className="flex flex-col gap-2">
+          <CustomRadioCheckbox
+            name="refeitorio"
+            type="radio"
+            value="adequado"
+            checked={refeitorio === "adequado"}
+            onChange={() => setRefeitorio("adequado")}
+            label="Adequado"
+          />
+          <CustomRadioCheckbox
+            name="refeitorio"
+            type="radio"
+            value="inadequado"
+            checked={refeitorio === "inadequado"}
+            onChange={() => setRefeitorio("inadequado")}
+            label="Inadequado"
+          />
+          <CustomRadioCheckbox
+            name="refeitorio"
+            type="radio"
+            value="nao-possui"
+            checked={refeitorio === "nao-possui"}
+            onChange={() => setRefeitorio("nao-possui")}
+            label="Não possui"
+          />
         </div>
         <div className="mt-2">
           <Label>Foto (opcional)</Label>
@@ -2287,37 +2276,31 @@ export default function RelatorioVisitaAmpliado() {
       </div>
       <div>
         <Label>Layout</Label>
-        <div className="flex gap-4">
-          <label className="flex items-center gap-2 text-gray-900 dark:text-gray-100">
-            <input
-              type="radio"
-              name="layout"
-              value="organizado"
-              checked={layout === "organizado"}
-              onChange={() => setLayout("organizado")}
-            />
-            Organizado
-          </label>
-          <label className="flex items-center gap-2 text-gray-900 dark:text-gray-100">
-            <input
-              type="radio"
-              name="layout"
-              value="parcialmente"
-              checked={layout === "parcialmente"}
-              onChange={() => setLayout("parcialmente")}
-            />
-            Parcialmente
-          </label>
-          <label className="flex items-center gap-2 text-gray-900 dark:text-gray-100">
-            <input
-              type="radio"
-              name="layout"
-              value="desorganizado"
-              checked={layout === "desorganizado"}
-              onChange={() => setLayout("desorganizado")}
-            />
-            Desorganizado
-          </label>
+        <div className="flex flex-col gap-2">
+          <CustomRadioCheckbox
+            name="layout"
+            type="radio"
+            value="organizado"
+            checked={layout === "organizado"}
+            onChange={() => setLayout("organizado")}
+            label="Organizado"
+          />
+          <CustomRadioCheckbox
+            name="layout"
+            type="radio"
+            value="parcialmente"
+            checked={layout === "parcialmente"}
+            onChange={() => setLayout("parcialmente")}
+            label="Parcialmente"
+          />
+          <CustomRadioCheckbox
+            name="layout"
+            type="radio"
+            value="desorganizado"
+            checked={layout === "desorganizado"}
+            onChange={() => setLayout("desorganizado")}
+            label="Desorganizado"
+          />
         </div>
         {(layout === "parcialmente" || layout === "desorganizado") && (
           <div className="mt-2">
@@ -2463,7 +2446,8 @@ export default function RelatorioVisitaAmpliado() {
                             Math.max(1, parseInt(e.target.value) || 1),
                           )
                         }
-                        className="block h-11 w-full border-x-0 border-gray-300 bg-gray-50 py-2.5 text-center text-sm text-gray-900 focus:border-blue-500 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400 dark:focus:border-blue-500 dark:focus:ring-blue-500"
+                        placeholder="0"
+                        className="block h-11 w-full border border-x-0 border-gray-300 bg-gray-50 py-2.5 text-center text-sm text-gray-900 focus:border-blue-500 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400 dark:focus:border-blue-500 dark:focus:ring-blue-500"
                       />
                       <button
                         type="button"
